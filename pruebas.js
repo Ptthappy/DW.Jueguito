@@ -52,7 +52,7 @@ prueba6 = function() {
 	grd.addColorStop(0, "rgb(0, 0, 0)");
 	grd.addColorStop(1, "rgb(255, 255, 255)");
 	tct.fillStyle = grd;
-	tct.fillRect(0, 0, 300, 300);
+	tct.fillRect(0, 0, 300, 30);
 
 }
 
@@ -60,7 +60,7 @@ prueba6 = function() {
 var tet = document.getElementById("tetrisbox");
 var tct = tet.getContext("2d");
 
-prueba6();
+
 
 
 
