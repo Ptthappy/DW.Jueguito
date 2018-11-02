@@ -4,78 +4,85 @@ let speed;  //La velocidad a la que se mueven los cuadros
 let score;  //Puntaje
 let maxScore;  //Esta variable se almacena en un archivo de texto
 let level = 0;  //El nivel que sube con el puntaje y define la velocidad
-let isPlaying = false;  //Variable que determina si se está jugando o no
-let squareSize = 40;  //Variable que define el tamaño constante que tendrán los cuadros
 
 let canvas = document.getElementById('tetrisbox');  //get canvas
 let w = canvas.width;
 let h = canvas.height;
 let ctx = canvas.getContext('2d');  //get contexto del canvas
 
-const iniSpeed = 3;      //velocidad de caida inicial
-const scaledSpeed = 1;   //velocidad obtenida cada vez que se sube de nivel
-const userMov = 5;       //cantidad de pixeles que el jugador se puede mover hacia los lados cada vez que llame a los evento
+const iniSpeed = 3;        //velocidad de caida inicial
+const scaledSpeed = 1;     //velocidad obtenida cada vez que se sube de nivel
+const userMov = 5;         //cantidad de pixeles que el jugador se puede mover hacia los lados cada vez que llame a los evento
+const toLevelUp = 100;     //cantidad de puntos necesarios para subir cada nivel
+const pointsPerSquare = 2; //cantidad de puntos conseguidos por eliminar cada cuadro
+const squareSize = 40;  //Variable que define el tamaño constante que tendrán los cuadros
 
 //Clases
 class Square { //Instancias de cada cuadrito
 	constructor(positionY, positionX) {
 		this.positionX = positionX;  //Posición en X
-		this.positionY = positionY;  //Posición en Y
-		this.size = 40;  //Tamaño
-		this.color = randomColor((Math.random()*6).floor());  //Color daaaaa
+		this.positionY = positionY;  //Posición en Y (con respecto al canvas obviamente)
+		this.size = squareSize;  //Tamaño
+
+		this.color = randomColor(Math.floor(Math.random()*6));  //Color daaaaa
 	}
 }
 
 //Instancias de las figuras específicas
 class Shape1 {
-	constructor(isInverse) {
-		this.squares = [new Square(), new Square(), new Square(), new Square()];
-		this.isInverse = isInverse;
+	constructor() {
+		this.squares = [new Square(-40, 180), new Square(-40, 200), new Square(-20, 180), new Square(-20, 200)];
+		this.inversable = false;	
+	}
 
-		function rotate() {
-
-		}
-
-		function moveVertical() {
-			for(let i = 0; i < squares.length; i++) {
-				squares[i].positionY += squareSize;
-			}
+	moveVertical() {
+		for(let i = 0; i < this.squares.length; i++) {
+			this.squares[i].positionY += 5;
+			console.log(this.squares[i].positionY);
+			console.log(this.squares[i].positionX);
 		}
 	}
+
+	rotate() {
+			
+	}
+
 }
 
-class Shape2 extends shape {
+class Shape2 {
 	constructor() {
-		super();
 	}
 }
 
-class Shape3 extends shape {
+class Shape3 {
 	constructor() {
-		super();
 	}
 }
 
-class Shape4 extends shape {
+class Shape4 {
 	constructor() {
-		super();
 	}
 }
 
-class Shape5 extends shape {
+class Shape5 {
 	constructor() {
-		super();
 	}
 }
+ctx.beginPath();
+ctx.fillRect(0, 0, 10, 10);
+ctx.closePath();
 
 //Funciones globales
 function render() {  //Función que dibuja en el canvas
-	ctx.clearRect(0, 0, w, h);
-	requestAnimationFrame(render());
+	//ctx.clearRect(0, 0, w, h);
 }
 
+culo = new Shape1();
 function frame() {  //El loop
-
+	setTimeout(function() {
+		render();
+		loop = requestAnimationFrame(frame);
+	}, 1000);
 }
 
 function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
@@ -89,6 +96,14 @@ function clearLine() {  //Función que se ejecuta si hay una linea completa para
 function put() {  //Función que se ejecuta cuando la figura cae
 
 }
+
+function initialize() {
+	speed = iniSpeed;
+	score = 0;
+	level = 1;
+	frame();
+}
+
 
 function randomColor(random) {  //Función genérica que genera un color aleatorio
 	switch(random) {
@@ -105,12 +120,13 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 		case 5:
 			return 'rbg(255, 0, 255)';
 		default:
+			console.log(random)
 			throw new Exception();
 	}
 }
 
 //Literalmente el código ahora sí 100% real
-/*No hay nada XDDD*/
+initialize();
 /*
 Ok pero se supone que haga lo siguiente:
 -Primero muestra una pantalla que representa un menú en todo el canvas, con un botón I guess
