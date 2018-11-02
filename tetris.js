@@ -29,9 +29,10 @@ class Square { //Instancias de cada cuadrito
 	}
 
 	choqueH(obj) {
-		if(this.positionX > w || this.positionX < 0)
-			return false;
-		return true;
+		console.log(this.positionX)
+		if(this.positionX > w - squareSize || this.positionX < 0)
+			return true;
+		return false;
 	}
 
 	choqueV(obj) {
@@ -48,27 +49,44 @@ class Shape {
 
 		for(let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionY += squareSize;
-			console.log(this.squares[i].positionX);
 		}
 
 		this.render(ctx)
 	}
 
-	moveH(key) {
+	moveRight(key) {
 		this.clear(ctx);
+		let choque = false;
 
-		if(key == "a" || key == "A") {
-			for (let i = 0; i < this.squares.length; i++) {
-				this.squares[i].positionX -= squareSize;
+		for (let i = 0; i < this.squares.length; i++) {
+			this.squares[i].positionX += squareSize;
+			if(this.squares[i].choqueH()) {
+				console.log('choque');
+				choque = true;
 			}
 		}
-		else {
-			for (let i = 0; i < this.squares.length; i++) {
-				this.squares[i].positionX += squareSize;
-			}
-		}
+		if(choque)
+			this.moveLeft();
+
 		render(ctx);
 
+	}
+
+	moveLeft(key) {
+		this.clear(ctx);
+		let choque = false;
+
+		for (let i = 0; i < this.squares.length; i++) {
+			this.squares[i].positionX -= squareSize;
+			if(this.squares[i].choqueH()) {
+				console.log('choque');
+				choque = true;
+			}
+		}
+		if(choque)
+			this.moveRight();
+
+		render(ctx);
 	}
 	
 	render(ctx) {
@@ -175,7 +193,7 @@ function frame() {  //El loop
 		render();
 		loop = requestAnimationFrame(frame);
 		//alterShapes();
-	}, 500);
+	}, 1000);
 }
 
 /*alterShapes = function() {
@@ -246,7 +264,7 @@ onkeypress = function(evt) {
 	switch(evt.key) {
 		case "A":
 		case "a":
-			shapes[0].moveH(evt.key);
+			shapes[0].moveLeft(evt.key);
 			break;
 
 		case "S":
@@ -256,7 +274,7 @@ onkeypress = function(evt) {
 
 		case "D":
 		case "d":
-			shapes[0].moveH(evt.key);
+			shapes[0].moveRight(evt.key);
 			break;
 
 		case "E":
