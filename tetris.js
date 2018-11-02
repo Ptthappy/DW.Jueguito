@@ -10,40 +10,76 @@ let w = canvas.width;
 let h = canvas.height;
 let ctx = canvas.getContext('2d');  //get contexto del canvas
 
-const iniSpeed = 3;        //velocidad de caida inicial
-const scaledSpeed = 1;     //velocidad obtenida cada vez que se sube de nivel
-const userMov = 5;         //cantidad de pixeles que el jugador se puede mover hacia los lados cada vez que llame a los evento
-const toLevelUp = 100;     //cantidad de puntos necesarios para subir cada nivel
-const pointsPerSquare = 2; //cantidad de puntos conseguidos por eliminar cada cuadro
-const squareSize = 40;  //Variable que define el tamaño constante que tendrán los cuadros
+const iniSpeed = 3;                 //velocidad de caida inicial
+const scaledSpeed = 1;              //velocidad obtenida cada vez que se sube de nivel
+const userMov = 5;                  //cantidad de pixeles que el jugador se puede mover hacia los lados cada vez que llame a los evento
+const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
+const pointsPerSquare = 2;          //cantidad de puntos conseguidos por eliminar cada cuadro
+const squareSize = 40;              //Variable que define el tamaño constante que tendrán los cuadros
+
+let shapes = [];                    //Cache de figuras para mostrar la figura siguiente y marisqueras
+let squares = [];                   //Arreglo con el que se representará cada posible cuadro del tetris
 
 //Clases
 class Square { //Instancias de cada cuadrito
 	constructor(positionY, positionX) {
 		this.positionX = positionX;  //Posición en X
 		this.positionY = positionY;  //Posición en Y (con respecto al canvas obviamente)
-		this.size = squareSize;  //Tamaño
-
 		this.color = randomColor(Math.floor(Math.random()*6));  //Color daaaaa
+	}
+
+	choqueH(obj) {
+		if(this.positionX > w || this.positionX < 0)
+			return false;
+		return true;
+	}
+
+	choqueV(obj) {
+
 	}
 }
 
 class Shape {
-	
+	constructor() {
+		this.squares = [];
+	}
 	moveV() {
+		this.clear(ctx);
+
 		for(let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionY += squareSize;
 			console.log(this.squares[i].positionX);
 		}
+
+		this.render(ctx)
 	}
 
-	moveH(evt) {
+	moveH(key) {
+		this.clear(ctx);
+
+		if(key == "a" || key == "A") {
+			for (let i = 0; i < this.squares.length; i++) {
+				this.squares[i].positionX -= squareSize;
+			}
+		}
+		else {
+			for (let i = 0; i < this.squares.length; i++) {
+				this.squares[i].positionX += squareSize;
+			}
+		}
+		render(ctx);
 
 	}
 	
 	render(ctx) {
 		for(let i = 0; i < this.squares.length; i++) {
 			ctx.fillRect(this.squares[i].positionX, this.squares[i].positionY, squareSize, squareSize);
+		}
+	}
+
+	clear(ctx) {
+		for (let i = 0; i < this.squares.length; i++) {
+			ctx.clearRect(this.squares[i].positionX, this.squares[i].positionY, squareSize, squareSize);
 		}
 	}
 }
@@ -129,17 +165,61 @@ class Shape7 extends Shape {
 
 //Funciones globales
 function render() {  //Función que dibuja en el canvas
-	ctx.clearRect(0, 0, w, h);
-	culo.render(ctx);
+	shapes[0].render(ctx);
 }
 
-culo = new Shape1();
+culo = new Shape7();
 function frame() {  //El loop
 	setTimeout(function() {
+		shapes[0].moveV();
 		render();
 		loop = requestAnimationFrame(frame);
-		culo.moveV();
-	}, 10000);
+		//alterShapes();
+	}, 500);
+}
+
+/*alterShapes = function() {
+	if (shapes[0].stopped) {
+		turnIntoSquares();
+		checkShapes();
+	}
+};
+*/
+checkShapes = function() {
+	for (let i = 0; i < 2; i++) {
+		if(shapes[i] == null)
+			shapes[i] = getRandomShape();
+	}
+};
+
+getRandomShape = function() {
+	let random = Math.floor(Math.random() * 5);
+	let rand2;
+	switch(random) {
+		case 0:
+			return new Shape1();
+
+		case 1:
+			return new Shape2();
+
+		case 2:
+			return new Shape3();
+
+		case 3:
+			rand2 = Math.floor(Math.random() * 2);
+			if(rand2 == 0)
+				return new Shape4();
+			return new Shape5();
+
+		case 4:
+			rand2 = Math.floor(Math.random() * 2);
+			if(rand2 == 0)
+				return new Shape6();
+			return new Shape7();
+
+		default:
+			throw new DOMException();
+	}
 }
 
 function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
@@ -158,6 +238,7 @@ function initialize() {
 	speed = iniSpeed;
 	score = 0;
 	level = 1;
+	checkShapes();
 	frame();
 }
 
@@ -165,22 +246,27 @@ onkeypress = function(evt) {
 	switch(evt.key) {
 		case "A":
 		case "a":
-			//Mover a la izquierda
+			shapes[0].moveH(evt.key);
 			break;
 
 		case "S":
 		case "s":
-			//Mover hacia abajo
+			shapes[0].moveV();
 			break;
 
 		case "D":
 		case "d":
-			//Mover a la derecha
+			shapes[0].moveH(evt.key);
 			break;
 
 		case "E":
 		case "e":
 			//Rotar de forma horaria
+			break;
+
+		case "Q":
+		case "q":
+			//Tirar la figura al piso
 			break;
 
 		default:
@@ -204,7 +290,7 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 			return 'rbg(255, 0, 255)';
 		default:
 			console.log(random);
-			throw new Exception();
+			throw new DOMException();
 	}
 }
 
@@ -229,10 +315,3 @@ pero aja como es Javascript supongo que se almacena en un JSON o que coño e la 
 -Utilizar un gradiente para el contenedor del canvas para que cambie entre los colores del arcoiris pero con una base dominante negra,
 suena muy kchuo ps
 */
-
-
-
-
-
-
-
