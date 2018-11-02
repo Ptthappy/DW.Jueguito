@@ -212,7 +212,7 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 initialize();
 /*
 Ok pero se supone que haga lo siguiente:
--Primero muestra una pantalla que representa un menú en todo el canvas, con un botón I guess
+-Primero muestra una pantalla que representa un menú en to do el canvas, con un botón I guess
 -Después de esa pantalla se muestra la pantalla del juego con la barra de estado a un lado
 -Van a haber 6 botones de listeners básicos (Es decir podrían haber más), que van a ser wasd para el movimiento, y <- y -> para rotar la 
 figura
