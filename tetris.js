@@ -28,53 +28,109 @@ class Square { //Instancias de cada cuadrito
 	}
 }
 
-//Instancias de las figuras específicas
-class Shape1 {
-	constructor() {
-		this.squares = [new Square(-40, 180), new Square(-40, 200), new Square(-20, 180), new Square(-20, 200)];
-		this.inversable = false;	
-	}
-
-	moveVertical() {
+class Shape {
+	
+	moveV() {
 		for(let i = 0; i < this.squares.length; i++) {
-			this.squares[i].positionY += 5;
-			console.log(this.squares[i].positionY);
+			this.squares[i].positionY += squareSize;
 			console.log(this.squares[i].positionX);
 		}
 	}
 
+	moveH(evt) {
+
+	}
+	
+	render(ctx) {
+		for(let i = 0; i < this.squares.length; i++) {
+			ctx.fillRect(this.squares[i].positionX, this.squares[i].positionY, squareSize, squareSize);
+		}
+	}
+}
+
+//Instancias de las figuras específicas
+class Shape1 extends Shape {
+	constructor() {
+		super();
+		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-40, 160), new Square(-40, 200)];
+	}
+
 	rotate() {
-			
+
 	}
 
 }
 
-class Shape2 {
+class Shape2 extends Shape {
 	constructor() {
+		super();
+		this.squares = [new Square(-40, 120), new Square(-40, 160), new Square(-40, 200), new Square(-40, 240)];
+	}
+
+	rotate() {
+
 	}
 }
 
-class Shape3 {
+class Shape3 extends Shape {
 	constructor() {
+		super();
+		this.squares = [new Square(-40, 200), new Square(-80, 160), new Square(-80, 200), new Square(-80, 240)];
+	}
+
+	rotate() {
+
 	}
 }
 
-class Shape4 {
+class Shape4 extends Shape {
 	constructor() {
+		super();
+		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-40, 200), new Square(-40, 240)];
+	}
+
+	rotate() {
+
 	}
 }
 
-class Shape5 {
+class Shape5 extends Shape {
 	constructor() {
+		super();
+		this.squares = [new Square(-40, 160), new Square(-40, 200), new Square(-80, 200), new Square(-80, 240)];
+	}
+
+	rotate() {
+
 	}
 }
-ctx.beginPath();
-ctx.fillRect(0, 0, 10, 10);
-ctx.closePath();
+
+class Shape6 extends Shape {
+	constructor() {
+		super();
+		this.squares = [new Square(-40, 160), new Square(-80, 160), new Square(-80, 200), new Square(-80, 240)];
+	}
+
+	rotate() {
+
+	}
+}
+
+class Shape7 extends Shape {
+	constructor() {
+		super();
+		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-80, 240), new Square(-40, 240)];
+	}
+
+	rotate() {
+
+	}
+}
 
 //Funciones globales
 function render() {  //Función que dibuja en el canvas
-	//ctx.clearRect(0, 0, w, h);
+	ctx.clearRect(0, 0, w, h);
+	culo.render(ctx);
 }
 
 culo = new Shape1();
@@ -82,7 +138,8 @@ function frame() {  //El loop
 	setTimeout(function() {
 		render();
 		loop = requestAnimationFrame(frame);
-	}, 1000);
+		culo.moveV();
+	}, 10000);
 }
 
 function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
@@ -104,6 +161,32 @@ function initialize() {
 	frame();
 }
 
+onkeypress = function(evt) {
+	switch(evt.key) {
+		case "A":
+		case "a":
+			//Mover a la izquierda
+			break;
+
+		case "S":
+		case "s":
+			//Mover hacia abajo
+			break;
+
+		case "D":
+		case "d":
+			//Mover a la derecha
+			break;
+
+		case "E":
+		case "e":
+			//Rotar de forma horaria
+			break;
+
+		default:
+	}
+};
+
 
 function randomColor(random) {  //Función genérica que genera un color aleatorio
 	switch(random) {
@@ -120,7 +203,7 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 		case 5:
 			return 'rbg(255, 0, 255)';
 		default:
-			console.log(random)
+			console.log(random);
 			throw new Exception();
 	}
 }
