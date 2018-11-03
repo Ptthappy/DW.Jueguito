@@ -30,7 +30,6 @@ class Square { //Instancias de cada cuadrito
 	}
 
 	choqueH(obj) {
-		console.log(this.positionX);
 		if(this.positionX > w - squareSize || this.positionX < 0)
 			return true;
 		return false;
@@ -43,11 +42,12 @@ class Square { //Instancias de cada cuadrito
 	}
 
 	choqueObj() {
-		for (let i = 0; i < 149; i++) {
+		for (let i = 0; i < 150; i++) {
 			if(at[i] == null)
 				continue;
-			if (this.positionX == at[i].positionX && this.positionY == at[i].positionY)
+			if (this.positionX == at[i].positionX && this.positionY == at[i].positionY) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -63,7 +63,7 @@ class Shape {
 
 		for(let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionY += squareSize;
-			if(this.squares[i].choqueV()) {
+			if(this.squares[i].choqueV() || this.squares[i].choqueObj()) {
 				console.log('choque');
 				choque = true;
 			}
@@ -86,7 +86,7 @@ class Shape {
 
 		for (let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionX += squareSize;
-			if(this.squares[i].choqueH()) {
+			if(this.squares[i].choqueH() || this.squares[i].choqueObj()) {
 				console.log('choque');
 				choque = true;
 			}
@@ -106,7 +106,7 @@ class Shape {
 
 		for (let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionX -= squareSize;
-			if(this.squares[i].choqueH()) {
+			if(this.squares[i].choqueH() || this.squares[i].choqueObj()) {
 				console.log('choque');
 				choque = true;
 			}
@@ -235,6 +235,7 @@ function frame() {  //El loop
 alterShapes = function() {
 	if (destroyer) {
 		destroyer = false;
+		disarrange(shapes[0]);
 		shapes[0] = shapes[1];
 		shapes[1] = null;
 		checkShapes();
@@ -276,7 +277,7 @@ getRandomShape = function() {
 		default:
 			throw new DOMException();
 	}
-}
+};
 
 function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
 
@@ -294,6 +295,9 @@ function initialize() {
 	speed = iniSpeed;
 	score = 0;
 	level = 1;
+	for (let i = 0; i < 150; i++) {
+		at[i] = null;
+	}
 	checkShapes();
 	frame();
 }
