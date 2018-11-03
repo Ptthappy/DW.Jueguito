@@ -18,7 +18,8 @@ const pointsPerSquare = 2;          //cantidad de puntos conseguidos por elimina
 const squareSize = 40;              //Variable que define el tamaño constante que tendrán los cuadros
 
 let shapes = [];                    //Cache de figuras para mostrar la figura siguiente y marisqueras
-let squares = [];                   //Arreglo con el que se representará cada posible cuadro del tetris
+let at = []; 	                    //Arreglo con el que se representará cada posible cuadro del tetris
+let destroyer = false;   			//Boolean que se vuelve true cuando la última figura tocó piso
 
 //Clases
 class Square { //Instancias de cada cuadrito
@@ -29,14 +30,16 @@ class Square { //Instancias de cada cuadrito
 	}
 
 	choqueH(obj) {
-		console.log(this.positionX)
+		console.log(this.positionX);
 		if(this.positionX > w - squareSize || this.positionX < 0)
 			return true;
 		return false;
 	}
 
 	choqueV(obj) {
-
+		if(this.positionY > h - squareSize)
+			return true;
+		return false;
 	}
 }
 
@@ -46,16 +49,29 @@ class Shape {
 	}
 	moveV() {
 		this.clear(ctx);
+		let choque = false;
 
 		for(let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionY += squareSize;
+			if(this.squares[i].choqueV()) {
+				console.log('choque');
+				choque = true;
+			}
+		}
+		if(choque) {
+			destroyer = true;
+			for(let i = 0; i < this.squares.length; i++) {
+				this.squares[i].positionY -= squareSize;
+			}
 		}
 
 		this.render(ctx)
 	}
 
-	moveRight(key) {
-		this.clear(ctx);
+	moveRight(doClear, key) {
+		if (doClear)
+			this.clear(ctx);
+
 		let choque = false;
 
 		for (let i = 0; i < this.squares.length; i++) {
@@ -66,14 +82,16 @@ class Shape {
 			}
 		}
 		if(choque)
-			this.moveLeft();
+			this.moveLeft(false, key);
 
 		render(ctx);
 
 	}
 
-	moveLeft(key) {
-		this.clear(ctx);
+	moveLeft(doClear, key) {
+		if (doClear)
+			this.clear(ctx);
+
 		let choque = false;
 
 		for (let i = 0; i < this.squares.length; i++) {
@@ -84,7 +102,7 @@ class Shape {
 			}
 		}
 		if(choque)
-			this.moveRight();
+			this.moveRight(false, key);
 
 		render(ctx);
 	}
@@ -101,6 +119,14 @@ class Shape {
 		}
 	}
 }
+
+disarrange = function(shape) {
+	let x, y;
+	for (let i = 0; i < shape.squares.length; i++) {
+		at[(shape.squares[i].positionX / 40) + (shape.squares[i].positionY / 4)] = shape.squares[i];
+	}
+	shapes[0] = null;
+};
 
 //Instancias de las figuras específicas
 class Shape1 extends Shape {
@@ -186,23 +212,25 @@ function render() {  //Función que dibuja en el canvas
 	shapes[0].render(ctx);
 }
 
-culo = new Shape7();
+let culo = new Shape7();
 function frame() {  //El loop
 	setTimeout(function() {
 		shapes[0].moveV();
 		render();
 		loop = requestAnimationFrame(frame);
-		//alterShapes();
+		alterShapes();
 	}, 1000);
 }
 
-/*alterShapes = function() {
-	if (shapes[0].stopped) {
-		turnIntoSquares();
+alterShapes = function() {
+	if (destroyer) {
+		destroyer = false;
+		shapes[0] = shapes[1];
+		shapes[1] = null;
 		checkShapes();
 	}
 };
-*/
+
 checkShapes = function() {
 	for (let i = 0; i < 2; i++) {
 		if(shapes[i] == null)
@@ -264,7 +292,7 @@ onkeypress = function(evt) {
 	switch(evt.key) {
 		case "A":
 		case "a":
-			shapes[0].moveLeft(evt.key);
+			shapes[0].moveLeft(true, evt.key);
 			break;
 
 		case "S":
@@ -274,7 +302,7 @@ onkeypress = function(evt) {
 
 		case "D":
 		case "d":
-			shapes[0].moveRight(evt.key);
+			shapes[0].moveRight(true, evt.key);
 			break;
 
 		case "E":
