@@ -297,9 +297,21 @@ function checkLines() {
 }
 
 function clearLine(line) {  //Función que se ejecuta si hay una linea completa para eliminarla
-	ctx.clearRect(at[140].positionX, at[140].positionY, w, squareSize);
+	ctx.clearRect(at[line * 10].positionX, at[line * 10].positionY, w, squareSize);
 	for (let i = 0; i < 10; i++)
 		at[(line * 10) + i] = null;
+
+	for (let i = line - 1; i > 0; i--) {
+		for (let j = 10; j > 0; j--) {
+			if (at[(i * 10) + j] == null || i == 15)
+				continue;
+			ctx.clearRect(at[(i * 10) + j].positionX, at[(i * 10) + j].positionY, squareSize, squareSize);
+			at[((i + 1) * 10) + j] = at[(i * 10) + j];
+			at[((i + 1) * 10) + j].positionY += squareSize;
+			at[(i * 10) + j] = null;
+			ctx.fillRect(at[((i + 1) * 10) + j].positionX, at[((i + 1) * 10) + j].positionY, squareSize, squareSize);
+		}
+	}
 }
 
 function put() {  //Función que se ejecuta cuando la figura cae
