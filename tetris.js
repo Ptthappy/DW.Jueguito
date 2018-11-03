@@ -175,7 +175,6 @@ class Shape2 extends Shape {
 		console.log(this.state);
 		switch(this.state) {				//El cuadro 1 se mantiene constante
 			case 0:
-				this.state = 0;
 				southToWest(this.squares[0]);
 				northToEast(this.squares[2]);
 				northToEast(this.squares[3]);
@@ -224,8 +223,60 @@ class Shape3 extends Shape {
 		this.squares = [new Square(-40, 200), new Square(-80, 160), new Square(-80, 200), new Square(-80, 240)];
 	}
 
-	rotate() {
+	rotate(bol) {
+		let choque = false;
 
+		if (bol) {
+			this.state++;
+			this.clear(ctx);
+		}
+		else
+			this.state--;
+
+		if (this.state > 3)
+			this.state -= 4;
+		if (this.state < 0)
+			this.state += 4;
+
+		console.log(this.state);
+		switch(this.state) {				//El cuadro 2 se mantiene constante
+			case 0:
+				eastToSouth(this.squares[0]);
+				southToWest(this.squares[1]);
+				northToEast(this.squares[3]);
+				break;
+
+			case 1:
+				southToWest(this.squares[0]);
+				westToNorth(this.squares[1]);
+				eastToSouth(this.squares[3]);
+				break;
+
+			case 2:
+				westToNorth(this.squares[0]);
+				northToEast(this.squares[1]);
+				southToWest(this.squares[3]);
+				break;
+
+			case 3:
+				northToEast(this.squares[0]);
+				eastToSouth(this.squares[1]);
+				westToNorth(this.squares[3]);
+				break;
+
+			default:
+				throw new DOMException();
+		}
+
+		for (let i = 0; i < this.squares.length; i++) {
+			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
+				choque = true;
+				break;
+			}
+		}
+		if (choque)
+			this.rotate(false);
+		this.render(ctx);
 	}
 }
 
@@ -235,8 +286,60 @@ class Shape4 extends Shape {
 		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-40, 200), new Square(-40, 240)];
 	}
 
-	rotate() {
+	rotate(bol) {
+		let choque = false;
 
+		if (bol) {
+			this.state++;
+			this.clear(ctx);
+		}
+		else
+			this.state--;
+
+		if (this.state > 3)
+			this.state -= 4;
+		if (this.state < 0)
+			this.state += 4;
+
+		console.log(this.state);
+		switch(this.state) {				//El cuadro 2 se mantiene constante
+			case 1:
+				toRight(this.squares[0]);
+				northToEast(this.squares[1]);
+				eastToSouth(this.squares[3]);
+				break;
+
+			case 2:
+				toDown(this.squares[0]);
+				eastToSouth(this.squares[1]);
+				southToWest(this.squares[3]);
+				break;
+
+			case 3:
+				toLeft(this.squares[0]);
+				southToWest(this.squares[1]);
+				westToNorth(this.squares[3]);
+				break;
+
+			case 0:
+				toUp(this.squares[0]);
+				westToNorth(this.squares[1]);
+				northToEast(this.squares[3]);
+				break;
+
+			default:
+				throw new DOMException();
+		}
+
+		for (let i = 0; i < this.squares.length; i++) {
+			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
+				choque = true;
+				break;
+			}
+		}
+		if (choque)
+			this.rotate(false);
+		this.render(ctx);
 	}
 }
 
@@ -246,8 +349,60 @@ class Shape5 extends Shape {
 		this.squares = [new Square(-40, 160), new Square(-40, 200), new Square(-80, 200), new Square(-80, 240)];
 	}
 
-	rotate() {
+	rotate(bol) {
+		let choque = false;
 
+		if (bol) {
+			this.state++;
+			this.clear(ctx);
+		}
+		else
+			this.state--;
+
+		if (this.state > 3)
+			this.state -= 4;
+		if (this.state < 0)
+			this.state += 4;
+
+		console.log(this.state);
+		switch(this.state) {				//El cuadro 2 se mantiene constante
+			case 1:
+				westToNorth(this.squares[0]);
+				northToEast(this.squares[2]);
+				toDown(this.squares[3]);
+				break;
+
+			case 2:
+				northToEast(this.squares[0]);
+				eastToSouth(this.squares[2]);
+				toLeft(this.squares[3]);
+				break;
+
+			case 3:
+				eastToSouth(this.squares[0]);
+				southToWest(this.squares[2]);
+				toUp(this.squares[3]);
+				break;
+
+			case 0:
+				southToWest(this.squares[0]);
+				westToNorth(this.squares[2]);
+				toRight(this.squares[3]);
+				break;
+
+			default:
+				throw new DOMException();
+		}
+
+		for (let i = 0; i < this.squares.length; i++) {
+			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
+				choque = true;
+				break;
+			}
+		}
+		if (choque)
+			this.rotate(false);
+		this.render(ctx);
 	}
 }
 
@@ -257,8 +412,60 @@ class Shape6 extends Shape {
 		this.squares = [new Square(-40, 160), new Square(-80, 160), new Square(-80, 200), new Square(-80, 240)];
 	}
 
-	rotate() {
+	rotate(bol) {
+		let choque = false;
 
+		if (bol) {
+			this.state++;
+			this.clear(ctx);
+		}
+		else
+			this.state--;
+
+		if (this.state > 3)
+			this.state -= 4;
+		if (this.state < 0)
+			this.state += 4;
+
+		console.log(this.state);
+		switch(this.state) {				//El cuadro 2 se mantiene constante
+			case 1:
+				toUp(this.squares[0]);
+				westToNorth(this.squares[1]);
+				eastToSouth(this.squares[3]);
+				break;
+
+			case 2:
+				toRight(this.squares[0]);
+				northToEast(this.squares[1]);
+				southToWest(this.squares[3]);
+				break;
+
+			case 3:
+				toDown(this.squares[0]);
+				eastToSouth(this.squares[1]);
+				westToNorth(this.squares[3]);
+				break;
+
+			case 0:
+				toLeft(this.squares[0]);
+				southToWest(this.squares[1]);
+				northToEast(this.squares[3]);
+				break;
+
+			default:
+				throw new DOMException();
+		}
+
+		for (let i = 0; i < this.squares.length; i++) {
+			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
+				choque = true;
+				break;
+			}
+		}
+		if (choque)
+			this.rotate(false);
+		this.render(ctx);
 	}
 }
 
@@ -268,8 +475,60 @@ class Shape7 extends Shape {
 		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-80, 240), new Square(-40, 240)];
 	}
 
-	rotate() {
+	rotate(bol) {
+		let choque = false;
 
+		if (bol) {
+			this.state++;
+			this.clear(ctx);
+		}
+		else
+			this.state--;
+
+		if (this.state > 3)
+			this.state -= 4;
+		if (this.state < 0)
+			this.state += 4;
+
+		console.log(this.state);
+		switch(this.state) {				//El cuadro 2 se mantiene constante
+			case 1:
+				toLeft(this.squares[3]);
+				westToNorth(this.squares[0]);
+				eastToSouth(this.squares[2]);
+				break;
+
+			case 2:
+				toUp(this.squares[3]);
+				northToEast(this.squares[0]);
+				southToWest(this.squares[2]);
+				break;
+
+			case 3:
+				toRight(this.squares[3]);
+				eastToSouth(this.squares[0]);
+				westToNorth(this.squares[2]);
+				break;
+
+			case 0:
+				toDown(this.squares[3]);
+				southToWest(this.squares[0]);
+				northToEast(this.squares[2]);
+				break;
+
+			default:
+				throw new DOMException();
+		}
+
+		for (let i = 0; i < this.squares.length; i++) {
+			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
+				choque = true;
+				break;
+			}
+		}
+		if (choque)
+			this.rotate(false);
+		this.render(ctx);
 	}
 }
 
@@ -294,20 +553,19 @@ function westToNorth(sqr) {
 }
 
 function toUp(sqr) {
-	sqr.positionY -= squareSize;
+	sqr.positionY -= squareSize * 2;
 }
 
 function toDown(sqr) {
-	sqr.positionY += squareSize;
+	sqr.positionY += squareSize * 2;
 }
 
 function toRight(sqr) {
-	sqr.positionX += squareSize;
-
+	sqr.positionX += squareSize * 2;
 }
 
 function toLeft(sqr) {
-	sqr.positionX -= squareSize;
+	sqr.positionX -= squareSize * 2;
 }
 
 //Funciones globales
