@@ -56,6 +56,7 @@ class Square { //Instancias de cada cuadrito
 class Shape {
 	constructor() {
 		this.squares = [];
+		this.state = 0;
 	}
 	moveV() {
 		this.clear(ctx);
@@ -146,9 +147,8 @@ class Shape1 extends Shape {
 	}
 
 	rotate() {
-
+		console.log('claro ya vas a darle vueltas al cuadrao');
 	}
-
 }
 
 class Shape2 extends Shape {
@@ -157,8 +157,64 @@ class Shape2 extends Shape {
 		this.squares = [new Square(-40, 120), new Square(-40, 160), new Square(-40, 200), new Square(-40, 240)];
 	}
 
-	rotate() {
+	rotate(bol) {
+		let choque = false;
 
+		if (bol) {
+			this.state++;
+			this.clear(ctx);
+		}
+		else
+			this.state--;
+
+		if (this.state > 3)
+			this.state -= 4;
+		if (this.state < 0)
+			this.state += 4;
+
+		console.log(this.state);
+		switch(this.state) {				//El cuadro 1 se mantiene constante
+			case 0:
+				this.state = 0;
+				southToWest(this.squares[0]);
+				northToEast(this.squares[2]);
+				northToEast(this.squares[3]);
+				northToEast(this.squares[3]);
+				break;
+
+			case 1:
+				westToNorth(this.squares[0]);
+				eastToSouth(this.squares[2]);
+				eastToSouth(this.squares[3]);
+				eastToSouth(this.squares[3]);
+				break;
+
+			case 2:
+				northToEast(this.squares[0]);
+				southToWest(this.squares[2]);
+				southToWest(this.squares[3]);
+				southToWest(this.squares[3]);
+				break;
+
+			case 3:
+				eastToSouth(this.squares[0]);
+				westToNorth(this.squares[2]);
+				westToNorth(this.squares[3]);
+				westToNorth(this.squares[3]);
+				break;
+
+			default:
+				throw new DOMException();
+		}
+		for (let i = 0; i < this.squares.length; i++) {
+			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
+				choque = true;
+				break;
+			}
+		}
+		if (choque)
+			this.rotate(false);
+		this.render(ctx);
 	}
 }
 
@@ -217,12 +273,48 @@ class Shape7 extends Shape {
 	}
 }
 
+function northToEast(sqr) {
+	sqr.positionX += squareSize;
+	sqr.positionY += squareSize;
+}
+
+function eastToSouth(sqr) {
+	sqr.positionX -= squareSize;
+	sqr.positionY += squareSize;
+}
+
+function southToWest(sqr) {
+	sqr.positionX -= squareSize;
+	sqr.positionY -= squareSize;
+}
+
+function westToNorth(sqr) {
+	sqr.positionX += squareSize;
+	sqr.positionY -= squareSize;
+}
+
+function toUp(sqr) {
+	sqr.positionY -= squareSize;
+}
+
+function toDown(sqr) {
+	sqr.positionY += squareSize;
+}
+
+function toRight(sqr) {
+	sqr.positionX += squareSize;
+
+}
+
+function toLeft(sqr) {
+	sqr.positionX -= squareSize;
+}
+
 //Funciones globales
 function render() {  //Función que dibuja en el canvas
 	shapes[0].render(ctx);
 }
 
-let culo = new Shape7();
 function frame() {  //El loop
 	setTimeout(function() {
 		shapes[0].moveV();
@@ -314,8 +406,10 @@ function clearLine(line) {  //Función que se ejecuta si hay una linea completa 
 	}
 }
 
-function put() {  //Función que se ejecuta cuando la figura cae
-
+function throwIt() {
+	for (let i = 0; i < 15; i++) {
+		shapes[0].moveV();
+	}
 }
 
 function initialize() {
@@ -329,31 +423,32 @@ function initialize() {
 	frame();
 }
 
-onkeypress = function(evt) {
-	switch(evt.key) {
-		case "A":
-		case "a":
-			shapes[0].moveLeft(true, evt.key);
+onkeydown = function(evt) {
+	console.log(evt.keyCode);
+	switch(evt.keyCode) {
+		case 65:
+		case 37:
+			shapes[0].moveLeft(true, evt.keyCode)
 			break;
 
-		case "S":
-		case "s":
+		case 83:
+		case 40:
 			shapes[0].moveV();
 			break;
 
-		case "D":
-		case "d":
-			shapes[0].moveRight(true, evt.key);
+		case 68:
+		case 39:
+			shapes[0].moveRight(true, evt.keyCode);
 			break;
 
-		case "E":
-		case "e":
-			//Rotar de forma horaria
+		case 69:
+		case 38:
+			shapes[0].rotate(true);
 			break;
 
-		case "Q":
-		case "q":
-			//Tirar la figura al piso
+		case 81:
+		case 16:
+			throwIt();
 			break;
 
 		default:
