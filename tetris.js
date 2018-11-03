@@ -29,13 +29,13 @@ class Square { //Instancias de cada cuadrito
 		this.color = randomColor(Math.floor(Math.random()*6));  //Color daaaaa
 	}
 
-	choqueH(obj) {
+	choqueH() {
 		if(this.positionX > w - squareSize || this.positionX < 0)
 			return true;
 		return false;
 	}
 
-	choqueV(obj) {
+	choqueV() {
 		if(this.positionY > h - squareSize)
 			return true;
 		return false;
@@ -239,6 +239,7 @@ alterShapes = function() {
 		shapes[0] = shapes[1];
 		shapes[1] = null;
 		checkShapes();
+		checkLines();
 	}
 };
 
@@ -283,8 +284,22 @@ function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
 
 }
 
-function clearLine() {  //Función que se ejecuta si hay una linea completa para eliminarla
+function checkLines() {
+	console.log('ola');
+	for (let i = 0; i < 15; i++) {
+		for (let j = 0; j < 10; j++) {
+			if(at[(i * 10) + j] == null)
+				break;
+			if (j == 9)
+				clearLine(i);
+		}
+	}
+}
 
+function clearLine(line) {  //Función que se ejecuta si hay una linea completa para eliminarla
+	ctx.clearRect(at[140].positionX, at[140].positionY, w, squareSize);
+	for (let i = 0; i < 10; i++)
+		at[(line * 10) + i] = null;
 }
 
 function put() {  //Función que se ejecuta cuando la figura cae
