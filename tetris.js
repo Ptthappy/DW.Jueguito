@@ -41,6 +41,16 @@ class Square { //Instancias de cada cuadrito
 			return true;
 		return false;
 	}
+
+	choqueObj() {
+		for (let i = 0; i < 149; i++) {
+			if(at[i] == null)
+				continue;
+			if (this.positionX == at[i].positionX && this.positionY == at[i].positionY)
+				return true;
+		}
+		return false;
+	}
 }
 
 class Shape {
