@@ -10,14 +10,14 @@ let w = canvas.width;
 let h = canvas.height;
 let ctx = canvas.getContext('2d');  //get contexto del canvas
 
-const iniSpeed = 3;                 //velocidad de caida inicial
-const scaledSpeed = 1;              //velocidad obtenida cada vez que se sube de nivel
-const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
+const iniSpeed = 1;                 //velocidad de caida inicial
+const scaledSpeed = 0.2;              //velocidad obtenida cada vez que se sube de nivel
+const toLevelUp = 100 * (level / 10);              //cantidad de puntos necesarios para subir cada nivel
 const squareSize = 40;              //Variable que define el tamaño constante que tendrán los cuadros
 
 let shapes = [];                    //Cache de figuras para mostrar la figura siguiente y marisqueras
 let at = []; 	                    //Arreglo con el que se representará cada posible cuadro del tetris
-let destroyer = false;   			//Boolean que se vuelve true cuando la última figura tocó piso
+let destroyer = false;   			//Boolean que se vuelve true cuando la figura en movimiento toca piso
 
 //Clases
 class Square { //Instancias de cada cuadrito
@@ -133,7 +133,7 @@ class Shape {
 class Shape1 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-40, 160), new Square(-40, 200)];
+		this.squares = [new Square(0, 160), new Square(0, 200), new Square(40, 160), new Square(40, 200)];
 	}
 
 	rotate() {
@@ -144,7 +144,7 @@ class Shape1 extends Shape {
 class Shape2 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(-40, 120), new Square(-40, 160), new Square(-40, 200), new Square(-40, 240)];
+		this.squares = [new Square(40, 120), new Square(40, 160), new Square(40, 200), new Square(40, 240)];
 	}
 
 	rotate(bol) {
@@ -209,7 +209,7 @@ class Shape2 extends Shape {
 class Shape3 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(-40, 200), new Square(-80, 160), new Square(-80, 200), new Square(-80, 240)];
+		this.squares = [new Square(40, 200), new Square(0, 160), new Square(0, 200), new Square(0, 240)];
 	}
 
 	rotate(bol) {
@@ -270,7 +270,7 @@ class Shape3 extends Shape {
 class Shape4 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-40, 200), new Square(-40, 240)];
+		this.squares = [new Square(0, 160), new Square(0, 200), new Square(40, 200), new Square(40, 240)];
 	}
 
 	rotate(bol) {
@@ -331,7 +331,7 @@ class Shape4 extends Shape {
 class Shape5 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(-40, 160), new Square(-40, 200), new Square(-80, 200), new Square(-80, 240)];
+		this.squares = [new Square(40, 160), new Square(40, 200), new Square(0, 200), new Square(0, 240)];
 	}
 
 	rotate(bol) {
@@ -392,7 +392,7 @@ class Shape5 extends Shape {
 class Shape6 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(-40, 160), new Square(-80, 160), new Square(-80, 200), new Square(-80, 240)];
+		this.squares = [new Square(40, 160), new Square(0, 160), new Square(0, 200), new Square(0, 240)];
 	}
 
 	rotate(bol) {
@@ -453,7 +453,7 @@ class Shape6 extends Shape {
 class Shape7 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(-80, 160), new Square(-80, 200), new Square(-80, 240), new Square(-40, 240)];
+		this.squares = [new Square(0, 160), new Square(0, 200), new Square(0, 240), new Square(40, 240)];
 	}
 
 	rotate(bol) {
@@ -511,8 +511,54 @@ class Shape7 extends Shape {
 	}
 }
 
-function render() {  //Función que dibuja en el canvas
-	shapes[0].render(ctx);
+//Funciones para realizar la rotación de las figuras
+function northToEast(sqr) {
+	sqr.positionX += squareSize;
+	sqr.positionY += squareSize;
+}
+
+function eastToSouth(sqr) {
+	sqr.positionX -= squareSize;
+	sqr.positionY += squareSize;
+}
+
+function southToWest(sqr) {
+	sqr.positionX -= squareSize;
+	sqr.positionY -= squareSize;
+}
+
+function westToNorth(sqr) {
+	sqr.positionX += squareSize;
+	sqr.positionY -= squareSize;
+}
+
+function toUp(sqr) {
+	sqr.positionY -= squareSize * 2;
+}
+
+function toDown(sqr) {
+	sqr.positionY += squareSize * 2;
+}
+
+function toRight(sqr) {
+	sqr.positionX += squareSize * 2;
+}
+
+function toLeft(sqr) {
+	sqr.positionX -= squareSize * 2;
+}
+
+//Funciones globales
+function initialize() {
+	speed = iniSpeed;
+	score = 0;
+	level = 1;
+	for (let i = 0; i < 150; i++) {
+		at[i] = null;
+	}
+	checkShapes();
+	render();
+	frame();
 }
 
 function frame() {  //El loop
@@ -522,6 +568,10 @@ function frame() {  //El loop
 		loop = requestAnimationFrame(frame);
 		alterShapes();
 	}, 1000);
+}
+
+function render() {  //Función que dibuja en el canvas
+	shapes[0].render(ctx);
 }
 
 disarrange = function(shape) {
@@ -622,42 +672,6 @@ function throwIt() {
 	}
 }
 
-function northToEast(sqr) {
-	sqr.positionX += squareSize;
-	sqr.positionY += squareSize;
-}
-
-function eastToSouth(sqr) {
-	sqr.positionX -= squareSize;
-	sqr.positionY += squareSize;
-}
-
-function southToWest(sqr) {
-	sqr.positionX -= squareSize;
-	sqr.positionY -= squareSize;
-}
-
-function westToNorth(sqr) {
-	sqr.positionX += squareSize;
-	sqr.positionY -= squareSize;
-}
-
-function toUp(sqr) {
-	sqr.positionY -= squareSize * 2;
-}
-
-function toDown(sqr) {
-	sqr.positionY += squareSize * 2;
-}
-
-function toRight(sqr) {
-	sqr.positionX += squareSize * 2;
-}
-
-function toLeft(sqr) {
-	sqr.positionX -= squareSize * 2;
-}
-
 onkeydown = function(evt) {
 	//console.log(evt.keyCode);
 	switch(evt.keyCode) {
@@ -707,17 +721,6 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 		default:
 			throw new DOMException();
 	}
-}
-
-function initialize() {
-	speed = iniSpeed;
-	score = 0;
-	level = 1;
-	for (let i = 0; i < 150; i++) {
-		at[i] = null;
-	}
-	checkShapes();
-	frame();
 }
 
 //Literalmente el código ahora sí 100% real
