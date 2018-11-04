@@ -12,9 +12,7 @@ let ctx = canvas.getContext('2d');  //get contexto del canvas
 
 const iniSpeed = 3;                 //velocidad de caida inicial
 const scaledSpeed = 1;              //velocidad obtenida cada vez que se sube de nivel
-const userMov = 5;                  //cantidad de pixeles que el jugador se puede mover hacia los lados cada vez que llame a los evento
 const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
-const pointsPerSquare = 2;          //cantidad de puntos conseguidos por eliminar cada cuadro
 const squareSize = 40;              //Variable que define el tamaño constante que tendrán los cuadros
 
 let shapes = [];                    //Cache de figuras para mostrar la figura siguiente y marisqueras
@@ -65,7 +63,7 @@ class Shape {
 		for(let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionY += squareSize;
 			if(this.squares[i].choqueV() || this.squares[i].choqueObj()) {
-				console.log('choque');
+				//console.log('choque');
 				choque = true;
 			}
 		}
@@ -88,7 +86,7 @@ class Shape {
 		for (let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionX += squareSize;
 			if(this.squares[i].choqueH() || this.squares[i].choqueObj()) {
-				console.log('choque');
+				//console.log('choque');
 				choque = true;
 			}
 		}
@@ -108,7 +106,7 @@ class Shape {
 		for (let i = 0; i < this.squares.length; i++) {
 			this.squares[i].positionX -= squareSize;
 			if(this.squares[i].choqueH() || this.squares[i].choqueObj()) {
-				console.log('choque');
+				//console.log('choque');
 				choque = true;
 			}
 		}
@@ -131,14 +129,6 @@ class Shape {
 	}
 }
 
-disarrange = function(shape) {
-	let x, y;
-	for (let i = 0; i < shape.squares.length; i++) {
-		at[(shape.squares[i].positionX / 40) + (shape.squares[i].positionY / 4)] = shape.squares[i];
-	}
-	shapes[0] = null;
-};
-
 //Instancias de las figuras específicas
 class Shape1 extends Shape {
 	constructor() {
@@ -147,7 +137,7 @@ class Shape1 extends Shape {
 	}
 
 	rotate() {
-		console.log('claro ya vas a darle vueltas al cuadrao');
+		//console.log('claro ya vas a darle vueltas al cuadrao');
 	}
 }
 
@@ -532,43 +522,6 @@ class Shape7 extends Shape {
 	}
 }
 
-function northToEast(sqr) {
-	sqr.positionX += squareSize;
-	sqr.positionY += squareSize;
-}
-
-function eastToSouth(sqr) {
-	sqr.positionX -= squareSize;
-	sqr.positionY += squareSize;
-}
-
-function southToWest(sqr) {
-	sqr.positionX -= squareSize;
-	sqr.positionY -= squareSize;
-}
-
-function westToNorth(sqr) {
-	sqr.positionX += squareSize;
-	sqr.positionY -= squareSize;
-}
-
-function toUp(sqr) {
-	sqr.positionY -= squareSize * 2;
-}
-
-function toDown(sqr) {
-	sqr.positionY += squareSize * 2;
-}
-
-function toRight(sqr) {
-	sqr.positionX += squareSize * 2;
-}
-
-function toLeft(sqr) {
-	sqr.positionX -= squareSize * 2;
-}
-
-//Funciones globales
 function render() {  //Función que dibuja en el canvas
 	shapes[0].render(ctx);
 }
@@ -581,6 +534,14 @@ function frame() {  //El loop
 		alterShapes();
 	}, 1000);
 }
+
+disarrange = function(shape) {
+	let x, y;
+	for (let i = 0; i < shape.squares.length; i++) {
+		at[(shape.squares[i].positionX / 40) + (shape.squares[i].positionY / 4)] = shape.squares[i];
+	}
+	shapes[0] = null;
+};
 
 alterShapes = function() {
 	if (destroyer) {
@@ -635,7 +596,7 @@ function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
 }
 
 function checkLines() {
-	console.log('ola');
+	//console.log('ola');
 	for (let i = 0; i < 15; i++) {
 		for (let j = 0; j < 10; j++) {
 			if(at[(i * 10) + j] == null)
@@ -647,6 +608,8 @@ function checkLines() {
 }
 
 function clearLine(line) {  //Función que se ejecuta si hay una linea completa para eliminarla
+	score += 10;
+	//console.log(score);
 	ctx.clearRect(at[line * 10].positionX, at[line * 10].positionY, w, squareSize);
 	for (let i = 0; i < 10; i++)
 		at[(line * 10) + i] = null;
@@ -670,23 +633,48 @@ function throwIt() {
 	}
 }
 
-function initialize() {
-	speed = iniSpeed;
-	score = 0;
-	level = 1;
-	for (let i = 0; i < 150; i++) {
-		at[i] = null;
-	}
-	checkShapes();
-	frame();
+function northToEast(sqr) {
+	sqr.positionX += squareSize;
+	sqr.positionY += squareSize;
+}
+
+function eastToSouth(sqr) {
+	sqr.positionX -= squareSize;
+	sqr.positionY += squareSize;
+}
+
+function southToWest(sqr) {
+	sqr.positionX -= squareSize;
+	sqr.positionY -= squareSize;
+}
+
+function westToNorth(sqr) {
+	sqr.positionX += squareSize;
+	sqr.positionY -= squareSize;
+}
+
+function toUp(sqr) {
+	sqr.positionY -= squareSize * 2;
+}
+
+function toDown(sqr) {
+	sqr.positionY += squareSize * 2;
+}
+
+function toRight(sqr) {
+	sqr.positionX += squareSize * 2;
+}
+
+function toLeft(sqr) {
+	sqr.positionX -= squareSize * 2;
 }
 
 onkeydown = function(evt) {
-	console.log(evt.keyCode);
+	//console.log(evt.keyCode);
 	switch(evt.keyCode) {
 		case 65:
 		case 37:
-			shapes[0].moveLeft(true, evt.keyCode)
+			shapes[0].moveLeft(true, evt.keyCode);
 			break;
 
 		case 83:
@@ -713,7 +701,6 @@ onkeydown = function(evt) {
 	}
 };
 
-
 function randomColor(random) {  //Función genérica que genera un color aleatorio
 	switch(random) {
 		case 0:
@@ -729,9 +716,19 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 		case 5:
 			return 'rbg(255, 0, 255)';
 		default:
-			console.log(random);
 			throw new DOMException();
 	}
+}
+
+function initialize() {
+	speed = iniSpeed;
+	score = 0;
+	level = 1;
+	for (let i = 0; i < 150; i++) {
+		at[i] = null;
+	}
+	checkShapes();
+	frame();
 }
 
 //Literalmente el código ahora sí 100% real
