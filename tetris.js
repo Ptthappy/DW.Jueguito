@@ -150,19 +150,15 @@ class Shape2 extends Shape {
 	rotate(bol) {
 		let choque = false;
 
-		if (bol) {
-			this.state++;
+		if (bol)
 			this.clear(ctx);
-		}
-		else
-			this.state--;
+		this.state++;
 
 		if (this.state > 3)
 			this.state -= 4;
 		if (this.state < 0)
 			this.state += 4;
 
-		console.log(this.state);
 		switch(this.state) {				//El cuadro 1 se mantiene constante
 			case 0:
 				southToWest(this.squares[0]);
@@ -201,9 +197,12 @@ class Shape2 extends Shape {
 				break;
 			}
 		}
-		if (choque)
-			this.rotate(false);
-		this.render(ctx);
+		if (choque && bol)
+			for (let i = 0; i < 3; i++)
+				this.rotate(false);
+
+		if (bol)
+			this.render(ctx);
 	}
 }
 
@@ -216,20 +215,16 @@ class Shape3 extends Shape {
 	rotate(bol) {
 		let choque = false;
 
-		if (bol) {
-			this.state++;
+		if (bol)
 			this.clear(ctx);
-		}
-		else
-			this.state--;
+		this.state++;
 
 		if (this.state > 3)
 			this.state -= 4;
 		if (this.state < 0)
 			this.state += 4;
 
-		console.log(this.state);
-		switch(this.state) {				//El cuadro 2 se mantiene constante
+		switch (this.state) {				//El cuadro 2 se mantiene constante
 			case 0:
 				eastToSouth(this.squares[0]);
 				southToWest(this.squares[1]);
@@ -257,16 +252,18 @@ class Shape3 extends Shape {
 			default:
 				throw new DOMException();
 		}
-
 		for (let i = 0; i < this.squares.length; i++) {
 			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
 				choque = true;
 				break;
 			}
 		}
-		if (choque)
-			this.rotate(false);
-		this.render(ctx);
+		if (choque && bol)
+			for (let i = 0; i < 3; i++)
+				this.rotate(false);
+
+		if (bol)
+			this.render(ctx);
 	}
 }
 
@@ -279,19 +276,15 @@ class Shape4 extends Shape {
 	rotate(bol) {
 		let choque = false;
 
-		if (bol) {
-			this.state++;
+		if (bol)
 			this.clear(ctx);
-		}
-		else
-			this.state--;
+		this.state++;
 
 		if (this.state > 3)
 			this.state -= 4;
 		if (this.state < 0)
 			this.state += 4;
 
-		console.log(this.state);
 		switch(this.state) {				//El cuadro 2 se mantiene constante
 			case 1:
 				toRight(this.squares[0]);
@@ -320,16 +313,18 @@ class Shape4 extends Shape {
 			default:
 				throw new DOMException();
 		}
-
 		for (let i = 0; i < this.squares.length; i++) {
 			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
 				choque = true;
 				break;
 			}
 		}
-		if (choque)
-			this.rotate(false);
-		this.render(ctx);
+		if (choque && bol)
+			for (let i = 0; i < 3; i++)
+				this.rotate(false);
+
+		if (bol)
+			this.render(ctx);
 	}
 }
 
@@ -342,19 +337,15 @@ class Shape5 extends Shape {
 	rotate(bol) {
 		let choque = false;
 
-		if (bol) {
-			this.state++;
+		if (bol)
 			this.clear(ctx);
-		}
-		else
-			this.state--;
+		this.state++;
 
 		if (this.state > 3)
 			this.state -= 4;
 		if (this.state < 0)
 			this.state += 4;
 
-		console.log(this.state);
 		switch(this.state) {				//El cuadro 2 se mantiene constante
 			case 1:
 				westToNorth(this.squares[0]);
@@ -383,16 +374,18 @@ class Shape5 extends Shape {
 			default:
 				throw new DOMException();
 		}
-
 		for (let i = 0; i < this.squares.length; i++) {
 			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
 				choque = true;
 				break;
 			}
 		}
-		if (choque)
-			this.rotate(false);
-		this.render(ctx);
+		if (choque && bol)
+			for (let i = 0; i < 3; i++)
+				this.rotate(false);
+
+		if (bol)
+			this.render(ctx);
 	}
 }
 
@@ -405,19 +398,15 @@ class Shape6 extends Shape {
 	rotate(bol) {
 		let choque = false;
 
-		if (bol) {
-			this.state++;
+		if (bol)
 			this.clear(ctx);
-		}
-		else
-			this.state--;
+		this.state++;
 
 		if (this.state > 3)
 			this.state -= 4;
 		if (this.state < 0)
 			this.state += 4;
 
-		console.log(this.state);
 		switch(this.state) {				//El cuadro 2 se mantiene constante
 			case 1:
 				toUp(this.squares[0]);
@@ -446,16 +435,18 @@ class Shape6 extends Shape {
 			default:
 				throw new DOMException();
 		}
-
 		for (let i = 0; i < this.squares.length; i++) {
 			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
 				choque = true;
 				break;
 			}
 		}
-		if (choque)
-			this.rotate(false);
-		this.render(ctx);
+		if (choque && bol)
+			for (let i = 0; i < 3; i++)
+				this.rotate(false);
+
+		if (bol)
+			this.render(ctx);
 	}
 }
 
@@ -468,19 +459,15 @@ class Shape7 extends Shape {
 	rotate(bol) {
 		let choque = false;
 
-		if (bol) {
-			this.state++;
+		if (bol)
 			this.clear(ctx);
-		}
-		else
-			this.state--;
+		this.state++;
 
 		if (this.state > 3)
 			this.state -= 4;
 		if (this.state < 0)
 			this.state += 4;
 
-		console.log(this.state);
 		switch(this.state) {				//El cuadro 2 se mantiene constante
 			case 1:
 				toLeft(this.squares[3]);
@@ -509,16 +496,18 @@ class Shape7 extends Shape {
 			default:
 				throw new DOMException();
 		}
-
 		for (let i = 0; i < this.squares.length; i++) {
 			if (this.squares[i].choqueObj() || this.squares[i].choqueV() || this.squares[i].choqueH()) {
 				choque = true;
 				break;
 			}
 		}
-		if (choque)
-			this.rotate(false);
-		this.render(ctx);
+		if (choque && bol)
+			for (let i = 0; i < 3; i++)
+				this.rotate(false);
+
+		if (bol)
+			this.render(ctx);
 	}
 }
 
