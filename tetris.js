@@ -3,8 +3,9 @@ let loop;  //Variable que hace el bucle del juego
 let speed;  //La velocidad a la que se mueven los cuadros
 let score;  //Puntaje
 let maxScore;  //Esta variable se almacena en un archivo de texto
-let level = 0;  //El nivel que sube con el puntaje y define la velocidad
+let level;  //El nivel que sube con el puntaje y define la velocidad
 let thrower = true;
+let isPlaying;
 
 let canvas = document.getElementById('tetrisbox');  //get canvas
 let w = canvas.width;
@@ -13,8 +14,9 @@ let ctx = canvas.getContext('2d');  //get contexto del canvas
 
 const iniSpeed = 1;                 //velocidad de caida inicial
 const scaledSpeed = 0.2;              //velocidad obtenida cada vez que se sube de nivel
-const toLevelUp = 100 * (level / 10);              //cantidad de puntos necesarios para subir cada nivel
+const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
 const squareSize = 40;              //Variable que define el tamaño constante que tendrán los cuadros
+const constScore = 80;
 
 let shapes = [];                    //Cache de figuras para mostrar la figura siguiente y marisqueras
 let at = []; 	                    //Arreglo con el que se representará cada posible cuadro del tetris
@@ -558,6 +560,7 @@ function initialize() {
 	for (let i = 0; i < 200; i++) {
 		at[i] = null;
 	}
+	isPlaying = true;
 	checkShapes();
 	render();
 	frame();
@@ -568,7 +571,7 @@ function frame() {  //El loop
 		shapes[0].moveV();
 		render();
 		requestAnimationFrame(frame);
-	}, 1000);
+	}, 1000 / speed);
 
 }
 
@@ -592,6 +595,7 @@ alterShapes = function() {
 		shapes[1] = null;
 		checkShapes();
 		checkLines();
+		gameOver();
 		render(ctx);
 	}
 };
@@ -635,7 +639,25 @@ getRandomShape = function() {
 };
 
 function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
+	console.log(score);
+	console.log(toLevelUp);
+	console.log(level);
+	console.log(toLevelUp * level);
+	if (score > toLevelUp * level) {
+		level++;
+		speed += scaledSpeed;
+		console.log('Has subido de nivel yay');
+	}
+}
 
+function gameOver() {
+	for (let i = 0; i < shapes[0].squares.length; i++) {
+		if (shapes[0].squares[i].choqueObj()) {
+			clearTimeout(loop);
+			console.log('perdiste lmao');
+			isPlaying = false;
+		}
+	}
 }
 
 function checkLines() {
@@ -651,8 +673,9 @@ function checkLines() {
 }
 
 function clearLine(line) {  //Función que se ejecuta si hay una linea completa para eliminarla
-	score += 10;
-	//console.log(score);
+	score += constScore;
+	levelUp();
+	console.log(score);
 	ctx.clearRect(at[line * 10].positionX, at[line * 10].positionY, w, squareSize);
 	for (let i = 0; i < 10; i++)
 		at[(line * 10) + i] = null;
@@ -679,33 +702,35 @@ function throwIt() {
 
 onkeydown = function(evt) {
 	//console.log(evt.keyCode);
-	switch(evt.keyCode) {
-		case 65:
-		case 37:
-			shapes[0].moveLeft(true, evt.keyCode);
-			break;
+	if (isPlaying) {
+		switch (evt.keyCode) {
+			case 65:
+			case 37:
+				shapes[0].moveLeft(true, evt.keyCode);
+				break;
 
-		case 83:
-		case 40:
-			shapes[0].moveV();
-			break;
+			case 83:
+			case 40:
+				shapes[0].moveV();
+				break;
 
-		case 68:
-		case 39:
-			shapes[0].moveRight(true, evt.keyCode);
-			break;
+			case 68:
+			case 39:
+				shapes[0].moveRight(true, evt.keyCode);
+				break;
 
-		case 69:
-		case 38:
-			shapes[0].rotate(true);
-			break;
+			case 69:
+			case 38:
+				shapes[0].rotate(true);
+				break;
 
-		case 81:
-		case 16:
-			throwIt();
-			break;
+			case 81:
+			case 16:
+				throwIt();
+				break;
 
-		default:
+			default:
+		}
 	}
 };
 
@@ -730,22 +755,3 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 
 //Literalmente el código ahora sí 100% real
 initialize();
-/*
-Ok pero se supone que haga lo siguiente:
--Primero muestra una pantalla que representa un menú en to do el canvas, con un botón I guess
--Después de esa pantalla se muestra la pantalla del juego con la barra de estado a un lado
--Van a haber 6 botones de listeners básicos (Es decir podrían haber más), que van a ser wasd para el movimiento, y <- y -> para rotar la 
-figura
--A medida que el jugador juega se va subiendo de nivel (Ganando puntikos)
--Cuando la función de caida del cubo se de cuenta de que hay un cuadro que abarca el pixel vertical 0 debe salir una función que ejecute 
-un game over (El cual puede que sea otro menucito gei)
--Al final se tendrá algo para almacenar el puntaje máximo (maxScore), si fuese un programa de Java se almacenaría en un archivo de texto
-pero aja como es Javascript supongo que se almacena en un JSON o que coño e la madre sé yo
-
----ADICIONALES---
--Hacer un menú de inicio y un menú de pausa DECENTE
--Agregar listener para pausa o para funciones especiales (o sea pausa xddddddddddd No se me ocurre nada más)
--Que los cuadros se vean burde finos (porque en mi mente me los imagino más feos quer coño)
--Utilizar un gradiente para el contenedor del canvas para que cambie entre los colores del arcoiris pero con una base dominante negra,
-suena muy kchuo ps
-*/
