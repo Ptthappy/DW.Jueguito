@@ -25,7 +25,6 @@
 #statusbar { 
 	position: absolute;
 	top: 0px;
-	left: 400px;
-	width: 200px;
-	height: 600px;
+	left: 401px;
+	border: 2px solid black;
 }

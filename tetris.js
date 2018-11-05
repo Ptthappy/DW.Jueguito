@@ -12,6 +12,11 @@ let w = canvas.width;
 let h = canvas.height;
 let ctx = canvas.getContext('2d');  //get contexto del canvas
 
+let status = document.getElementById('statusbar');
+let sw = status.width;
+let sh = status.height;
+let sctx = status.getContext('2d');
+
 const iniSpeed = 1;                 //velocidad de caida inicial
 const scaledSpeed = 0.2;              //velocidad obtenida cada vez que se sube de nivel
 const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
@@ -75,7 +80,9 @@ class Shape {
 			for(let i = 0; i < this.squares.length; i++) {
 				this.squares[i].positionY -= squareSize;
 			}
-			alterShapes();
+			if (isPlaying) {
+				alterShapes();
+			}
 		}
 
 		this.render(ctx)
@@ -562,6 +569,7 @@ function initialize() {
 	}
 	isPlaying = true;
 	checkShapes();
+	showFig();
 	render();
 	frame();
 }
@@ -595,6 +603,7 @@ alterShapes = function() {
 		shapes[1] = null;
 		checkShapes();
 		checkLines();
+		showFig();
 		gameOver();
 		render(ctx);
 	}
@@ -750,6 +759,14 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 			return 'rbg(255, 0, 255)';
 		default:
 			throw new DOMException();
+	}
+}
+
+//Funciones para el canvas de estado
+function showFig() {
+	sctx.clearRect(0, 0, w, 200);
+	for(let i = 0; i < shapes[1].squares.length; i++) {
+		sctx.fillRect(shapes[1].squares[i].positionX - 109, shapes[1].squares[i].positionY + 10, squareSize, squareSize);
 	}
 }
 
