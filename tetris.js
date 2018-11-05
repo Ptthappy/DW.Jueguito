@@ -6,6 +6,7 @@ let maxScore;  //Esta variable se almacena en un archivo de texto
 let level;  //El nivel que sube con el puntaje y define la velocidad
 let thrower = true;
 let isPlaying;
+let pause = true;
 
 let canvas = document.getElementById('tetrisbox');  //get canvas
 let w = canvas.width;
@@ -673,6 +674,16 @@ function gameOver() {
 	}
 }
 
+function pauseGame() {
+	clearTimeout(loop);
+	isPlaying = false;
+}
+
+function resumeGame() {
+	frame();
+	isPlaying = true;
+}
+
 function checkLines() {
 	//console.log('ola');
 	for (let i = 0; i < 20; i++) {
@@ -689,27 +700,24 @@ function clearLine(line) {  //Función que se ejecuta si hay una linea completa 
 	score += constScore;
 	levelUp();
 	//console.log(score);
-	ctx.clearRect(0, 0, w, h);
-	for (let i = line; i > 0; i) {
-		for (let j = 0; j < 10; j++) {
-			at[(i * 10) + j] = at[((i - 1) * 10) + j];
-		}
-	}
-	/*for (let i = 0; i < 10; i++)
+	ctx.clearRect(0, at[(line * 10)].positionY, w, squareSize);
+	for (let i = 0; i < 10; i++) {
 		at[(line * 10) + i] = null;
+	}
 
-	for (let i = line; i > 0; i--) {
+	for (let i = line - 1; i > 0; i--) {
 		for (let j = 0; j < 10; j++) {
 			if (at[(i * 10) + j] == null)
 				continue;
+			console.log('a');
+			ctx.clearRect(at[(i * 10) + j].positionX, at[(i * 10) + j].positionY, squareSize, squareSize);
 			at[((i + 1) * 10) + j] = at[(i * 10) + j];
 			at[((i + 1) * 10) + j].positionY += squareSize;
 			at[(i * 10) + j] = null;
 			ctx.fillStyle = at[((i + 1) * 10) + j].color;
 			ctx.fillRect(at[((i + 1) * 10) + j].positionX, at[((i + 1) * 10) + j].positionY, squareSize, squareSize);
 		}
-	}*/
-	console.log(at);
+	}
 }
 
 function throwIt() {
@@ -720,7 +728,7 @@ function throwIt() {
 }
 
 onkeydown = function(evt) {
-	//console.log(evt.keyCode);
+	console.log(evt.keyCode);
 	if (isPlaying) {
 		switch (evt.keyCode) {
 			case 65:
@@ -748,9 +756,15 @@ onkeydown = function(evt) {
 				throwIt();
 				break;
 
+			case 80:
+				pauseGame();
+				break;
+
 			default:
 		}
 	}
+	else if(evt.keyCode == 80)
+		resumeGame();
 };
 
 function randomColor(random) {  //Función genérica que genera un color aleatorio
