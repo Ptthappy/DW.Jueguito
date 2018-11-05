@@ -4,6 +4,7 @@ let speed;  //La velocidad a la que se mueven los cuadros
 let score;  //Puntaje
 let maxScore;  //Esta variable se almacena en un archivo de texto
 let level = 0;  //El nivel que sube con el puntaje y define la velocidad
+let thrower = true;
 
 let canvas = document.getElementById('tetrisbox');  //get canvas
 let w = canvas.width;
@@ -40,7 +41,7 @@ class Square { //Instancias de cada cuadrito
 	}
 
 	choqueObj() {
-		for (let i = 0; i < 150; i++) {
+		for (let i = 0; i < 200; i++) {
 			if(at[i] == null)
 				continue;
 			if (this.positionX == at[i].positionX && this.positionY == at[i].positionY) {
@@ -72,6 +73,7 @@ class Shape {
 			for(let i = 0; i < this.squares.length; i++) {
 				this.squares[i].positionY -= squareSize;
 			}
+			alterShapes();
 		}
 
 		this.render(ctx)
@@ -144,7 +146,7 @@ class Shape1 extends Shape {
 class Shape2 extends Shape {
 	constructor() {
 		super();
-		this.squares = [new Square(40, 120), new Square(40, 160), new Square(40, 200), new Square(40, 240)];
+		this.squares = [new Square(0, 120), new Square(0, 160), new Square(0, 200), new Square(0, 240)];
 	}
 
 	rotate(bol) {
@@ -553,7 +555,7 @@ function initialize() {
 	speed = iniSpeed;
 	score = 0;
 	level = 1;
-	for (let i = 0; i < 150; i++) {
+	for (let i = 0; i < 200; i++) {
 		at[i] = null;
 	}
 	checkShapes();
@@ -562,12 +564,12 @@ function initialize() {
 }
 
 function frame() {  //El loop
-	setTimeout(function() {
+	loop = setTimeout(function() {
 		shapes[0].moveV();
 		render();
-		loop = requestAnimationFrame(frame);
-		alterShapes();
+		requestAnimationFrame(frame);
 	}, 1000);
+
 }
 
 function render() {  //Función que dibuja en el canvas
@@ -575,7 +577,6 @@ function render() {  //Función que dibuja en el canvas
 }
 
 disarrange = function(shape) {
-	let x, y;
 	for (let i = 0; i < shape.squares.length; i++) {
 		at[(shape.squares[i].positionX / 40) + (shape.squares[i].positionY / 4)] = shape.squares[i];
 	}
@@ -585,18 +586,21 @@ disarrange = function(shape) {
 alterShapes = function() {
 	if (destroyer) {
 		destroyer = false;
+		thrower = false;
 		disarrange(shapes[0]);
 		shapes[0] = shapes[1];
 		shapes[1] = null;
 		checkShapes();
 		checkLines();
+		render(ctx);
 	}
 };
 
 checkShapes = function() {
 	for (let i = 0; i < 2; i++) {
-		if(shapes[i] == null)
+		if(shapes[i] == null) {
 			shapes[i] = getRandomShape();
+		}
 	}
 };
 
@@ -636,7 +640,7 @@ function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
 
 function checkLines() {
 	//console.log('ola');
-	for (let i = 0; i < 15; i++) {
+	for (let i = 0; i < 20; i++) {
 		for (let j = 0; j < 10; j++) {
 			if(at[(i * 10) + j] == null)
 				break;
@@ -655,7 +659,7 @@ function clearLine(line) {  //Función que se ejecuta si hay una linea completa 
 
 	for (let i = line - 1; i > 0; i--) {
 		for (let j = 10; j > 0; j--) {
-			if (at[(i * 10) + j] == null || i == 15)
+			if (at[(i * 10) + j] == null || i == 19)
 				continue;
 			ctx.clearRect(at[(i * 10) + j].positionX, at[(i * 10) + j].positionY, squareSize, squareSize);
 			at[((i + 1) * 10) + j] = at[(i * 10) + j];
@@ -667,9 +671,10 @@ function clearLine(line) {  //Función que se ejecuta si hay una linea completa 
 }
 
 function throwIt() {
-	for (let i = 0; i < 15; i++) {
+	while (thrower) {
 		shapes[0].moveV();
 	}
+	thrower = true;
 }
 
 onkeydown = function(evt) {
