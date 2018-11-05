@@ -6,13 +6,15 @@
 </head>
 <body>
 	<div id="contenedor">
-		<!--<div id="introtetris">
-			<img src="imgs/intro.png">
-		</div>-->
-
 		<canvas id="tetrisbox" width="400" height="800"></canvas>
 		<canvas id="statusbar" width="199" height="800"></canvas>
+		<button id="pauseButton" onclick="pauseGame()">Pause</button>
+		<button id="resumeButton" onclick="resumeGame()">Resume</button>
 		<script type="text/javascript" src="tetris.js"></script>
+		<div id="introtetris">
+			<img src="sourcefiles/intro.jpg" width="605" height="805">
+			<button id="playButton" onclick="initialize()">Play</button>
+		</div>
 	</div>
 </body>
 </html>

@@ -680,8 +680,10 @@ function pauseGame() {
 }
 
 function resumeGame() {
-	frame();
-	isPlaying = true;
+	if (isPlaying == false) {
+		frame();
+		isPlaying = true;
+	}
 }
 
 function checkLines() {
@@ -810,6 +812,3 @@ function iniStatus() {
 	sctx.closePath();
 	showFig();
 }
-
-//Literalmente el código ahora sí 100% real
-initialize();
