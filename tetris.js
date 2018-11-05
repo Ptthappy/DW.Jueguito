@@ -16,6 +16,7 @@ let status = document.getElementById('statusbar');
 let sw = status.width;
 let sh = status.height;
 let sctx = status.getContext('2d');
+sctx.font = "lighter small-caps 20px Arial";
 
 const iniSpeed = 1;                 //velocidad de caida inicial
 const scaledSpeed = 0.2;              //velocidad obtenida cada vez que se sube de nivel
@@ -569,7 +570,7 @@ function initialize() {
 	}
 	isPlaying = true;
 	checkShapes();
-	showFig();
+	iniStatus();
 	render();
 	frame();
 }
@@ -764,10 +765,26 @@ function randomColor(random) {  //Función genérica que genera un color aleator
 
 //Funciones para el canvas de estado
 function showFig() {
-	sctx.clearRect(0, 0, w, 200);
+	sctx.clearRect(0, 300, w, 150);  //Limpia el sitio donde aparece la figura siguiente
+	sctx.clearRect(0, 0, w, 249);   //Limpia el sitio donde va el texto
+	sctx.strokeText("Level: " + level, 5, 40);
+	sctx.strokeText("Score: " + score, 5, 75);
+	sctx.strokeText("Max Score: " + maxScore, 5, 110);
 	for(let i = 0; i < shapes[1].squares.length; i++) {
-		sctx.fillRect(shapes[1].squares[i].positionX - 109, shapes[1].squares[i].positionY + 10, squareSize, squareSize);
+		sctx.fillRect(shapes[1].squares[i].positionX - 102, shapes[1].squares[i].positionY + 345, squareSize, squareSize);
 	}
+}
+
+function iniStatus() {
+	sctx.beginPath();
+	sctx.moveTo(0, 300);
+	sctx.lineTo(sw, 300);
+	sctx.stroke();
+	sctx.moveTo(0, 470);
+	sctx.lineTo(sw, 470);
+	sctx.stroke();
+	sctx.closePath();
+	showFig();
 }
 
 //Literalmente el código ahora sí 100% real
