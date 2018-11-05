@@ -33,7 +33,7 @@ class Square { //Instancias de cada cuadrito
 	constructor(positionY, positionX) {
 		this.positionX = positionX;  //Posición en X
 		this.positionY = positionY;  //Posición en Y (con respecto al canvas obviamente)
-		this.color = randomColor(Math.floor(Math.random()*6));  //Color daaaaa
+		this.color = null;
 	}
 
 	choqueH() {
@@ -64,6 +64,7 @@ class Shape {
 	constructor() {
 		this.squares = [];
 		this.state = 0;
+		this.color = randomColor(Math.floor(Math.random()*6));  //Color daaaaa
 	}
 	moveV() {
 		this.clear(ctx);
@@ -128,8 +129,9 @@ class Shape {
 		render(ctx);
 	}
 	
-	render(ctx) {
+	render() {
 		for(let i = 0; i < this.squares.length; i++) {
+			ctx.fillStyle = this.color;
 			ctx.fillRect(this.squares[i].positionX, this.squares[i].positionY, squareSize, squareSize);
 		}
 	}
@@ -591,6 +593,7 @@ function render() {  //Función que dibuja en el canvas
 disarrange = function(shape) {
 	for (let i = 0; i < shape.squares.length; i++) {
 		at[(shape.squares[i].positionX / 40) + (shape.squares[i].positionY / 4)] = shape.squares[i];
+		at[(shape.squares[i].positionX / 40) + (shape.squares[i].positionY / 4)].color = shape.color;
 	}
 	shapes[0] = null;
 };
@@ -685,22 +688,28 @@ function checkLines() {
 function clearLine(line) {  //Función que se ejecuta si hay una linea completa para eliminarla
 	score += constScore;
 	levelUp();
-	console.log(score);
-	ctx.clearRect(at[line * 10].positionX, at[line * 10].positionY, w, squareSize);
-	for (let i = 0; i < 10; i++)
+	//console.log(score);
+	ctx.clearRect(0, 0, w, h);
+	for (let i = line; i > 0; i) {
+		for (let j = 0; j < 10; j++) {
+			at[(i * 10) + j] = at[((i - 1) * 10) + j];
+		}
+	}
+	/*for (let i = 0; i < 10; i++)
 		at[(line * 10) + i] = null;
 
-	for (let i = line - 1; i > 0; i--) {
-		for (let j = 10; j > 0; j--) {
-			if (at[(i * 10) + j] == null || i == 19)
+	for (let i = line; i > 0; i--) {
+		for (let j = 0; j < 10; j++) {
+			if (at[(i * 10) + j] == null)
 				continue;
-			ctx.clearRect(at[(i * 10) + j].positionX, at[(i * 10) + j].positionY, squareSize, squareSize);
 			at[((i + 1) * 10) + j] = at[(i * 10) + j];
 			at[((i + 1) * 10) + j].positionY += squareSize;
 			at[(i * 10) + j] = null;
+			ctx.fillStyle = at[((i + 1) * 10) + j].color;
 			ctx.fillRect(at[((i + 1) * 10) + j].positionX, at[((i + 1) * 10) + j].positionY, squareSize, squareSize);
 		}
-	}
+	}*/
+	console.log(at);
 }
 
 function throwIt() {
@@ -747,17 +756,17 @@ onkeydown = function(evt) {
 function randomColor(random) {  //Función genérica que genera un color aleatorio
 	switch(random) {
 		case 0:
-			return 'rbg(255, 0, 0)';
+			return '#990505';
 		case 1:
-			return 'rbg(0, 255, 0)';
+			return '#109918';
 		case 2:
-			return 'rbg(0, 0, 255)';
+			return '#1E208A';
 		case 3:
-			return 'rbg(255, 255, 0)';
+			return '#E3D410';
 		case 4:
-			return 'rbg(255, 255, 255)';
+			return '#FF0066';
 		case 5:
-			return 'rbg(255, 0, 255)';
+			return '#1DB8A0';
 		default:
 			throw new DOMException();
 	}
@@ -770,6 +779,7 @@ function showFig() {
 	sctx.strokeText("Level: " + level, 5, 40);
 	sctx.strokeText("Score: " + score, 5, 75);
 	sctx.strokeText("Max Score: " + maxScore, 5, 110);
+	sctx.fillStyle = shapes[1].color;
 	for(let i = 0; i < shapes[1].squares.length; i++) {
 		sctx.fillRect(shapes[1].squares[i].positionX - 102, shapes[1].squares[i].positionY + 345, squareSize, squareSize);
 	}
