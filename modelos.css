@@ -86,10 +86,78 @@
 	width: 98%;
 }
 
-#pauseMenu {
+#pausemenu {
+	position: absolute;
 	display: none;
+	left: 90px;
+	top: 200px;
+	width: 400px;
+	height: 400px;
+	border-radius: 30px;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.9);
+	font-size: 40px;
+	font-family: "Segoe Print";
 }
 
-#gameOverMenu {
+#gameovermenu {
+	position: absolute;
 	display: none;
+	left: 0px;
+	top: 0px;
+	width: 605px;
+	height: 805px;
+	border-radius: 20px;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.9);
+	font-size: 40px;
+	font-family: "Segoe Print";
+}
+
+#resume {
+	position: absolute;
+	border: none;
+	border-radius: 10px;
+	margin-left: 25%;
+	margin-top: 15%;
+	font-family: "Segoe Print";
+	font-size: 20px;
+	width: 200px;
+	height: 60px;
+	color: white;
+	background-color: black;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+}
+
+#restart {
+	position: absolute;
+	border: none;
+	border-radius: 10px;
+	margin-left: 25%;
+	margin-top: 40%;
+	font-family: "Segoe Print";
+	font-size: 20px;
+	width: 200px;
+	height: 60px;
+	color: white;
+	background-color: black;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+}
+
+#playAgain {
+	position: absolute;
+	border: none;
+	border-radius: 10px;
+	margin-left: 32%;
+	margin-top: 20%;
+	font-family: "Segoe Print";
+	font-size: 20px;
+	width: 200px;
+	height: 60px;
+	color: white;
+	background-color: black;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 }

@@ -1,8 +1,9 @@
 //Variables globales
+
 let loop;  //Variable que hace el bucle del juego
 let speed;  //La velocidad a la que se mueven los cuadros
 let score;  //Puntaje
-let maxScore;  //Esta variable se almacena en un archivo de texto
+//let maxScore;  //Esta variable se almacena en un archivo de texto
 let level;  //El nivel que sube con el puntaje y define la velocidad
 let thrower = true;
 let isPlaying;
@@ -12,6 +13,10 @@ let canvas = document.getElementById('tetrisbox');  //get canvas
 let w = canvas.width;
 let h = canvas.height;
 let ctx = canvas.getContext('2d');  //get contexto del canvas
+
+let pauseMenu = document.getElementById('pausemenu');
+let gameOverMenu = document.getElementById('gameovermenu');
+let doc = document.getElementById('introtetris');
 
 let status = document.getElementById('statusbar');
 let sw = status.width;
@@ -565,14 +570,23 @@ function toLeft(sqr) {
 
 //Funciones globales
 function initialize() {
+	ctx.clearRect(0, 0, w, h);
+	shapes[0] = null;
+	shapes[1] = null;
 	speed = iniSpeed;
 	score = 0;
 	level = 1;
 	for (let i = 0; i < 200; i++) {
 		at[i] = null;
 	}
-	let doc = document.getElementById('introtetris');
-	doc.parentNode.removeChild(doc);
+	if (doc != null) {
+		doc.parentNode.removeChild(doc);
+		doc = null;
+	}
+	if (pauseMenu != null)
+		pauseMenu.style.display = "none";
+	if (gameOverMenu.style.display == 'block')
+		gameOverMenu.style.display = 'none';
 	isPlaying = true;
 	checkShapes();
 	iniStatus();
@@ -670,21 +684,23 @@ function gameOver() {
 	for (let i = 0; i < shapes[0].squares.length; i++) {
 		if (shapes[0].squares[i].choqueObj()) {
 			clearTimeout(loop);
-			console.log('perdiste lmao');
+			gameOverMenu.style.display= "block";
 			isPlaying = false;
 		}
 	}
 }
 
 function pauseGame() {
-	clearTimeout(loop);
 	isPlaying = false;
+	clearTimeout(loop);
+	pauseMenu.style.display = "block";
 }
 
 function resumeGame() {
 	if (isPlaying == false) {
-		frame();
 		isPlaying = true;
+		frame();
+		pauseMenu.style.display = "none";
 	}
 }
 
@@ -732,7 +748,6 @@ function throwIt() {
 }
 
 onkeydown = function(evt) {
-	console.log(evt.keyCode);
 	if (isPlaying) {
 		switch (evt.keyCode) {
 			case 65:
@@ -796,7 +811,7 @@ function showFig() {
 	sctx.clearRect(0, 0, w, 249);   //Limpia el sitio donde va el texto
 	sctx.strokeText("Level: " + level, 5, 40);
 	sctx.strokeText("Score: " + score, 5, 75);
-	sctx.strokeText("Max Score: " + maxScore, 5, 110);
+//	sctx.strokeText("Max Score: " + maxScore, 5, 110);
 	sctx.fillStyle = shapes[1].color;
 	for(let i = 0; i < shapes[1].squares.length; i++) {
 		sctx.fillRect(shapes[1].squares[i].positionX - 102, shapes[1].squares[i].positionY + 345, squareSize, squareSize);
@@ -816,5 +831,5 @@ function iniStatus() {
 }
 
 function showHelp() {
-
+	window.href = "www.google.com";
 }
