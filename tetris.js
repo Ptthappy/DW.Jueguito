@@ -669,14 +669,14 @@ getRandomShape = function() {
 };
 
 function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
-	console.log(score);
-	console.log(toLevelUp);
-	console.log(level);
-	console.log(toLevelUp * level);
+	//console.log(score);
+	//console.log(toLevelUp);
+	//console.log(level);
+	//console.log(toLevelUp * level);
 	if (score > toLevelUp * level) {
 		level++;
 		speed += scaledSpeed;
-		console.log('Has subido de nivel yay');
+		//console.log('Has subido de nivel yay');
 	}
 }
 
@@ -729,7 +729,7 @@ function clearLine(line) {  //Función que se ejecuta si hay una linea completa 
 		for (let j = 0; j < 10; j++) {
 			if (at[(i * 10) + j] == null)
 				continue;
-			console.log('a');
+			//console.log('a');
 			ctx.clearRect(at[(i * 10) + j].positionX, at[(i * 10) + j].positionY, squareSize, squareSize);
 			at[((i + 1) * 10) + j] = at[(i * 10) + j];
 			at[((i + 1) * 10) + j].positionY += squareSize;

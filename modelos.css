@@ -35,7 +35,11 @@
 
 #pauseButton {
 	position: absolute;
+	border: none;
 	cursor: pointer;
+	font-size: 15px;
+	font-family: "Segoe Print";
+	border-radius: 10px;
 	top: 500px;
 	left: 427px;
 	width: 150px;
