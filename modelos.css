@@ -1,7 +1,8 @@
 #contenedor {
 	position: relative;
 	top: 0px;
-	left: 100px;
+	top: 50px;
+	left: 350px;
 	width: 600px;
 	height: 600px;
 	border: 10px;
@@ -9,11 +10,13 @@
 
 #introtetris {
 	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 600px;
-	height: 600px;
-	color: #000000;
+	border: none;
+	border-radius: 20px;
+	top: -10px;
+	left: -10px;
+	width: 620px;
+	height: 820px;
+	background-color: rgb(50, 50, 50);
 }
 
 #tetrisbox {
@@ -32,15 +35,8 @@
 
 #pauseButton {
 	position: absolute;
+	cursor: pointer;
 	top: 500px;
-	left: 427px;
-	width: 150px;
-	height: 40px;
-}
-
-#resumeButton {
-	position: absolute;
-	top: 560px;
 	left: 427px;
 	width: 150px;
 	height: 40px;
@@ -48,8 +44,52 @@
 
 #playButton {
 	position: absolute;
-	top: 450px;
-	left: 450px;
-	width: 150px;
-	height: 40px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	display: block;
+	background-color: rgb(50, 50, 50);
+	font-size: 35px;
+	font-family: "Segoe Print";
+	padding-right: 100px;
+	color: white;
+	top: 220px;
+	left: 3px;
+	width: 200px;
+	height: 60px;
+}
+
+#helpButton {
+	position: absolute;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	display: block;
+	background-color: rgb(50, 50, 50);
+	font-size: 35px;
+	font-family: "Segoe Print";
+	padding-right: 65px;
+	color: white;
+	top: 285px;
+	left: 3px;
+	width: 200px;
+	height: 60px;
+}
+
+#img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1px;
+	border: 5px solid black;
+	border-radius: 20px;
+	width: 98%;
+}
+
+#pauseMenu {
+	display: none;
+}
+
+#gameOverMenu {
+	display: none;
 }

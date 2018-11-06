@@ -571,6 +571,8 @@ function initialize() {
 	for (let i = 0; i < 200; i++) {
 		at[i] = null;
 	}
+	let doc = document.getElementById('introtetris');
+	doc.parentNode.removeChild(doc);
 	isPlaying = true;
 	checkShapes();
 	iniStatus();
@@ -811,4 +813,8 @@ function iniStatus() {
 	sctx.stroke();
 	sctx.closePath();
 	showFig();
+}
+
+function showHelp() {
+
 }
