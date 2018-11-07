@@ -27,10 +27,6 @@ sctx.font = "lighter small-caps 20px Arial";
 
 let song = document.getElementById('dance');  //cancioncita de fondo
 
-let soundpum = new Audio('pum.wav');  //Sonido cuando se tira
-let soundclear = new Audio('clear.wav'); //Sonido cuando se limpia una linea
-let soundrotate = new Audio('tic.wav');  //Sonido cuando se rota
-
 const iniSpeed = 1;                 //velocidad de caida inicial
 const scaledSpeed = 0.6;              //velocidad obtenida cada vez que se sube de nivel
 const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
@@ -599,6 +595,7 @@ function initialize() {
 	checkShapes();
 	iniStatus();
 	render();
+	clearTimeout(loop);
 	frame();
 }
 
@@ -852,5 +849,6 @@ function iniStatus() {
 }
 
 function showHelp() {
-	window.href = "www.google.com";
+	let win = new Window();
+	win.location.replace("http://www.tetrisfriends.com/help/tips.php");
 }
