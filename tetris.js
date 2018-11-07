@@ -4,6 +4,7 @@ let loop;  //Variable que hace el bucle del juego
 let speed;  //La velocidad a la que se mueven los cuadros
 let score;  //Puntaje
 //let maxScore;  //Esta variable se almacena en un archivo de texto
+
 let level;  //El nivel que sube con el puntaje y define la velocidad
 let thrower = true;
 let isPlaying;
@@ -24,11 +25,17 @@ let sh = status.height;
 let sctx = status.getContext('2d');
 sctx.font = "lighter small-caps 20px Arial";
 
+let song = document.getElementById('dance');  //cancioncita de fondo
+
+let soundpum = new Audio('pum.wav');  //Sonido cuando se tira
+let soundclear = new Audio('clear.wav'); //Sonido cuando se limpia una linea
+let soundrotate = new Audio('tic.wav');  //Sonido cuando se rota
+
 const iniSpeed = 1;                 //velocidad de caida inicial
-const scaledSpeed = 0.2;              //velocidad obtenida cada vez que se sube de nivel
+const scaledSpeed = 0.6;              //velocidad obtenida cada vez que se sube de nivel
 const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
 const squareSize = 40;              //Variable que define el tamaño constante que tendrán los cuadros
-const constScore = 80;
+const constScore = 10;
 
 let shapes = [];                    //Cache de figuras para mostrar la figura siguiente y marisqueras
 let at = []; 	                    //Arreglo con el que se representará cada posible cuadro del tetris
@@ -576,6 +583,7 @@ function initialize() {
 	speed = iniSpeed;
 	score = 0;
 	level = 1;
+	song.play();
 	for (let i = 0; i < 200; i++) {
 		at[i] = null;
 	}
@@ -596,6 +604,7 @@ function initialize() {
 
 function frame() {  //El loop
 	loop = setTimeout(function() {
+		song.play();
 		shapes[0].moveV();
 		render();
 		requestAnimationFrame(frame);
@@ -604,6 +613,15 @@ function frame() {  //El loop
 }
 
 function render() {  //Función que dibuja en el canvas
+	ctx.clearRect(0, 0, w, h);
+	for (let i = 0; i < 20; i++) {
+		for (let j = 0; j < 10; j++) {
+			if (at[(i * 10) + j] == null)
+				continue;
+			ctx.fillStyle = at[(i * 10) + j].color;
+			ctx.fillRect(at[(i * 10) + j].positionX, at[(i * 10) + j].positionY, squareSize, squareSize);
+		}
+	}
 	shapes[0].render(ctx);
 }
 
@@ -673,7 +691,7 @@ function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
 	//console.log(toLevelUp);
 	//console.log(level);
 	//console.log(toLevelUp * level);
-	if (score > toLevelUp * level) {
+	if (score >= toLevelUp * level) {
 		level++;
 		speed += scaledSpeed;
 		//console.log('Has subido de nivel yay');
@@ -683,9 +701,10 @@ function levelUp() {  //Función que se ejecuta cada vez que se sube de nivel
 function gameOver() {
 	for (let i = 0; i < shapes[0].squares.length; i++) {
 		if (shapes[0].squares[i].choqueObj()) {
-			clearTimeout(loop);
+			song.pause();
 			gameOverMenu.style.display= "block";
 			isPlaying = false;
+			clearTimeout(loop);
 		}
 	}
 }
@@ -694,6 +713,7 @@ function pauseGame() {
 	isPlaying = false;
 	clearTimeout(loop);
 	pauseMenu.style.display = "block";
+	song.pause();
 }
 
 function resumeGame() {
@@ -701,6 +721,7 @@ function resumeGame() {
 		isPlaying = true;
 		frame();
 		pauseMenu.style.display = "none";
+		song.play();
 	}
 }
 
