@@ -3,7 +3,7 @@
 let loop;  //Variable que hace el bucle del juego
 let speed;  //La velocidad a la que se mueven los cuadros
 let score;  //Puntaje
-//let maxScore;  //Esta variable se almacena en un archivo de texto
+let maxScore;  //Esta variable se almacena en un archivo de texto
 
 let level;  //El nivel que sube con el puntaje y define la velocidad
 let thrower = true;
@@ -31,7 +31,7 @@ const iniSpeed = 1;                 //velocidad de caida inicial
 const scaledSpeed = 0.6;              //velocidad obtenida cada vez que se sube de nivel
 const toLevelUp = 100;              //cantidad de puntos necesarios para subir cada nivel
 const squareSize = 40;              //Variable que define el tamaño constante que tendrán los cuadros
-const constScore = 10;
+const constScore = 20;
 
 let shapes = [];                    //Cache de figuras para mostrar la figura siguiente y marisqueras
 let at = []; 	                    //Arreglo con el que se representará cada posible cuadro del tetris
@@ -829,7 +829,7 @@ function showFig() {
 	sctx.clearRect(0, 0, w, 249);   //Limpia el sitio donde va el texto
 	sctx.strokeText("Level: " + level, 5, 40);
 	sctx.strokeText("Score: " + score, 5, 75);
-//	sctx.strokeText("Max Score: " + maxScore, 5, 110);
+	//sctx.strokeText("Max Score: " + maxScore.maxScore, 5, 110);
 	sctx.fillStyle = shapes[1].color;
 	for(let i = 0; i < shapes[1].squares.length; i++) {
 		sctx.fillRect(shapes[1].squares[i].positionX - 102, shapes[1].squares[i].positionY + 345, squareSize, squareSize);
@@ -849,6 +849,5 @@ function iniStatus() {
 }
 
 function showHelp() {
-	let win = new Window();
-	win.location.replace("http://www.tetrisfriends.com/help/tips.php");
+	window.location.replace("http://www.tetrisfriends.com/help/tips.php");
 }
